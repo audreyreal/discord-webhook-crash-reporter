@@ -1,2 +1,2 @@
 # crash-reporter
- sends a python traceback to a discord webhook
+ sends a python traceback.format_exc() to a discord webhook
