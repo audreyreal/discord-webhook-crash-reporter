@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 from os import getlogin
-from datetime import datetime
 import requests
 
 
@@ -39,11 +38,12 @@ def anonymize_traceback(traceback: str, new_user: str) -> str:
     return universal_traceback.replace(f"/{getlogin()}", f"/{new_user}")
 
 
-def upload(webhook_url: str, traceback: str) -> int:
+def upload(webhook_url: str, username: str, traceback: str) -> int:
     """Sends a traceback string to a discord webhook for sake of crash reporting
 
     Args:
         webhook_url (str): Link to the discord webhook
+        username (str): Username for the webhook to use. Recommend using the program name + semver e.g. "MyProgram 1.0.0"
         traceback (str): Traceback string, will attempt to anonymize if not already
 
     Returns:
@@ -52,10 +52,7 @@ def upload(webhook_url: str, traceback: str) -> int:
     if f"/{getlogin()}" in traceback.replace("\\", "/"):
         traceback = anonymize_traceback(traceback, "RemovedForAnonymization")
 
-    data: dict = {
-        "content": f"''{traceback}''",
-        "username": str(datetime.today()),
-    }
+    data: dict = {"content": f"''{traceback}''", "username": username}
 
     headers: dict = {"User-Agent": "Crash reporter"}
 
