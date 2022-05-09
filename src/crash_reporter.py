@@ -35,7 +35,9 @@ def anonymize_traceback(traceback: str, new_user: str) -> str:
         str: The new traceback with the username replaced with new_user
     """
     universal_traceback: str = traceback.replace("\\", "/")
+    # replaces backslashes with forward slashes
     return universal_traceback.replace(f"/{getlogin()}", f"/{new_user}")
+    # removes the username from the traceback
 
 
 def upload(webhook_url: str, username: str, traceback: str) -> int:
@@ -44,7 +46,7 @@ def upload(webhook_url: str, username: str, traceback: str) -> int:
     Args:
         webhook_url (str): Link to the discord webhook
         username (str): Username for the webhook to use. Recommend using the program name + semver e.g. "MyProgram 1.0.0"
-        traceback (str): Traceback string, will attempt to anonymize if not already
+        traceback (str): Traceback string (traceback.format_exc() is preferred), will attempt to anonymize if not already
 
     Returns:
         int: Status code of the response
@@ -52,7 +54,7 @@ def upload(webhook_url: str, username: str, traceback: str) -> int:
     if f"/{getlogin()}" in traceback.replace("\\", "/"):
         traceback = anonymize_traceback(traceback, "RemovedForAnonymization")
 
-    data: dict = {"content": f"''{traceback}''", "username": username}
+    data: dict = {"content": f"```python\n{traceback}```", "username": username}
 
     headers: dict = {"User-Agent": "Crash reporter"}
 
