@@ -4,6 +4,9 @@ version = "1.1.0"
 description = "uploads a python traceback to a discord webhook"
 authors = ["sweeze <sw33ze@protonmail.com>"]
 license = "MIT"
+packages = [
+    { include = "src" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
